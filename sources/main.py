@@ -19,6 +19,7 @@ class ExternalToolApp:
         # Initialize window_del as an instance variable
         self.window_del = None
 
+
         button_matrix = [
             [sg.Button('Input', key='input_btn', size=(15, 4), font=('Arial', 14)),
              sg.Button('View', key='view_btn', size=(15, 4), font=('Arial', 14))],
@@ -129,19 +130,24 @@ class ExternalToolApp:
         name = values['Name']
         comment = values['Comment']
 
-        query = ""
+        # Exclude "deleted" records
+        query = "pd.isna(self.df['deletion_datetime'])"
+
         if name:
-            query += f"Name.str.contains('{name}')"
+            query += f" & self.df['Name'].str.contains('{name}')"
 
         if comment:
-            if query:
-                query += " and "
-            query += f"Comment.str.contains('{comment}')"
+            query += f" & self.df['Comment'].str.contains('{comment}')"
 
         if query:
-            return self.df.query(query)
+            filtered_df = self.df.query(query)
         else:
-            return self.df.tail(20)
+            filtered_df = self.df
+
+        # Exclude rows with valid deletion_datetime
+        filtered_df = filtered_df[pd.isna(filtered_df['deletion_datetime'])]
+
+        return filtered_df.tail(20)
 
     def update_view_table(self):
         if hasattr(self, 'window_view') and self.window_view:
