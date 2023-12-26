@@ -5,7 +5,6 @@ from datetime import datetime
 import openpyxl
 import self
 
-
 class ExternalToolApp:
     def __init__(self, database_path):
         self.database_path = database_path
