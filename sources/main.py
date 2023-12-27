@@ -19,7 +19,6 @@ class ExternalToolApp:
         # Initialize window_del as an instance variable
         self.window_del = None
 
-
         button_matrix = [
             [sg.Button('Input', key='input_btn', size=(15, 4), font=('Arial', 14)),
              sg.Button('View', key='view_btn', size=(15, 4), font=('Arial', 14))],
@@ -109,22 +108,22 @@ class ExternalToolApp:
                 auto_size_columns=True,
                 justification='right',
                 key='table'
-                )]
-            ]
+            )]
+        ]
 
         window_view = sg.Window('View Window', layout_view)
 
         while True:
-                event, values = window_view.read()
+            event, values = window_view.read()
 
-                if event == sg.WIN_CLOSED:
-                    break
-                elif event == 'find_btn':
-                    filtered_df = self.filter_data(values)
-                    window_view['table'].update(values=filtered_df.values.tolist(), auto_size_columns=True)
-                    self.update_sgf_text()  # Update SGF text after filtering
+            if event == sg.WIN_CLOSED:
+                break
+            elif event == 'find_btn':
+                filtered_df = self.filter_data(values)
+                window_view['table'].update(values=filtered_df.values.tolist(), auto_size_columns=True)
+                self.update_sgf_text()  # Update SGF text after filtering
 
-                window_view.close()
+            window_view.close()
 
     def filter_data(self, values):
         name = values['Name']
