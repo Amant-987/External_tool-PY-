@@ -26,9 +26,6 @@ class ExternalToolApp:
              sg.Button('Exit', key='exit_btn', size=(15, 4), font=('Arial', 14))]
         ]
 
-        # Text element to display SGF column content
-        sgf_text_element = sg.Text("", key="sgf_text", size=(40, 10), font=('Arial', 16))
-
         self.layout_enter = [
             [sg.Text('External Tool', size=(30, 1), font=('Arial', 20), justification='center')],
             [sg.Text('')],  # Empty row above sg.VCenter
@@ -65,7 +62,8 @@ class ExternalToolApp:
 
         window_input.close()
 
-    def validate_input(self, values):
+    @staticmethod
+    def validate_input(values):
         name = values['Name']
         sgf = values['SGF']
         comment = values['Comment']
@@ -130,7 +128,7 @@ class ExternalToolApp:
         comment = values['Comment']
 
         # Exclude "deleted" records
-        query = "pd.isna(self.df['deletion_datetime'])"
+        query = "pd.isnan(self.df['deletion_datetime'])"
 
         if name:
             query += f" & self.df['Name'].str.contains('{name}')"
